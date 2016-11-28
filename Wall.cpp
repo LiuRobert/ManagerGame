@@ -1,7 +1,5 @@
 #include "Wall.h"
 
-
-
 Wall::Wall(const float& x, const float& y)
 {
 	_shape.setSize(sf::Vector2f(23.0f, 23.0f));
@@ -11,7 +9,6 @@ Wall::Wall(const float& x, const float& y)
 	setPosition(x, y);
 	_drawables.push_back(&_shape);
 }
-
 
 Wall::~Wall()
 {
