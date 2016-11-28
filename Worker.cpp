@@ -45,13 +45,6 @@ void Worker::think(const float& dt)
 	if (_path.empty())
 	{
 		_path = worldgrid->getPath(mapPosition(), _goal);
-		/*
-		if (!_path.empty())
-		{
-			_next = _path.back();
-			_path.pop_back();
-		}
-		*/
 	}
 
 

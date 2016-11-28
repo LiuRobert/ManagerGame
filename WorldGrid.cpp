@@ -38,12 +38,14 @@ void WorldGrid::init(const int & worldWidth, const int & worldHeight, const floa
 
 void WorldGrid::addEntity(const int & x, const int & y, Entity * entity)
 {
+	checkInsideMap(x, y);
 	setEntity(x, y, entity);
 	entity->addParent(this);
 }
 
-Entity * WorldGrid::getEntity(const int& x, const int& y)
+Entity* WorldGrid::getEntity(const int& x, const int& y)
 {
+	checkInsideMap(x, y);
 	return _map[key(x, y)].entity;
 }
 
@@ -170,9 +172,28 @@ std::vector<GridCoord> WorldGrid::getPath(const GridCoord& from, const GridCoord
 	return result;
 }
 
+GridCoord WorldGrid::getWorldSize()
+{
+	return{ _worldSizeX - 1, _worldSizeY - 1 };
+}
+
+bool WorldGrid::insideMap(const int & x, const int & y)
+{
+	return (x > 0 && x < _worldSizeX - 1 && y > 0 && y < _worldSizeY - 1);
+}
+
 void WorldGrid::setEntity(const int& x, const int& y, Entity* entity)
 {
+	checkInsideMap(x, y);
 	_map[key(x, y)].entity = entity;
+	if (_entityPosition.find(entity) == _entityPosition.end())
+	{
+		_entityPosition.insert({ entity,{ { x, y } } });
+	}
+	else
+	{
+		_entityPosition.at(entity).push_back({ x, y });
+	}
 }
 
 void WorldGrid::setEntity(const Vector2D& pos, Entity* entity)
@@ -184,11 +205,21 @@ void WorldGrid::setEntity(const Vector2D& pos, Entity* entity)
 
 void WorldGrid::removeEntity(const int& x, const int& y)
 {
+	checkInsideMap(x, y);
+	GridCoord coord = { x, y };
+	Utils::remove(_entityPosition.at(_map[key(x, y)].entity), coord);
 	_map[key(x, y)].entity = nullptr;
 }
 
 void WorldGrid::removeEntity(Entity * entity)
 {
+	if (_entityPosition.find(entity) != _entityPosition.end())
+	{
+		for (const GridCoord& coord : _entityPosition.at(entity))
+			_map[key(coord.x, coord.y)].entity = nullptr;
+
+		_entityPosition.erase(entity);
+	}
 }
 
 void WorldGrid::addToSet(Node*& openSet, Node* goal, Node* parent, Node* neighbor, const float& deltaDistance)
@@ -218,6 +249,12 @@ void WorldGrid::addToSet(Node*& openSet, Node* goal, Node* parent, Node* neighbo
 		//shape.setFillColor(sf::Color::Magenta);
 		//window->draw(shape);
 	}
+}
+
+void WorldGrid::checkInsideMap(const int & x, const int & y)
+{
+	if (x <= 0 || x >= _worldSizeX - 1 || y <= 0 || y >= _worldSizeY - 1)
+		throw "Trying to access node outside Map";
 }
 
 void WorldGrid::debugDraw(Node * openSet, Node * closedSet, Node * goal, Node * current)

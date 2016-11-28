@@ -23,6 +23,8 @@ public:
 	Entity* getEntity(const int& x, const int& y);
 	float getGridSize();
 	std::vector<GridCoord> getPath(const GridCoord& from, const GridCoord& to);
+	GridCoord getWorldSize();
+	bool insideMap(const int& x, const int& y);
 	void setEntity(const int& x, const int& y, Entity* entity);
 	void setEntity(const Vector2D& pos, Entity* entity);
 	void removeEntity(const int& x, const int& y);
@@ -34,10 +36,13 @@ private:
 	int _worldSizeY;
 	float _gridSize;
 	Node* _map;
+	std::unordered_map<Entity*, std::vector<GridCoord> > _entityPosition;
+
 	const float _distanceStraight;
 	const float _distanceDiagonal;
 
 	void addToSet(Node*& openSet, Node* goal, Node* parent, Node* neighbor, const float& deltaDistance);
+	void checkInsideMap(const int& x, const int& y);
 	void debugDraw(Node* openSet, Node* closedSet, Node* goal, Node* current);
 	int key(const int& x, const int& y);
 };

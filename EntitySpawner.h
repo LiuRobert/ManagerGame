@@ -13,6 +13,7 @@ public:
 	void control(const long& operation) override;
 	static void spawnWall(const int& gridX, const int& gridY);
 	static void spawnWorker(const int& gridX, const int& gridY);
+	static void removeEntity(const int& gridX, const int& gridY);
 
 private:
 	float _gridSize;
@@ -21,7 +22,8 @@ private:
 	{
 		SpawnWall,
 		SpawnWorker,
-		ShowCoords
+		ShowCoords,
+		RemoveEntity
 	};
 };
 

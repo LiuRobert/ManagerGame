@@ -29,7 +29,7 @@ void World::init()
 {
 	float gridSize = 24.0f;
 	_pEntitySpawner->init(gridSize);
-	_pWorldgrid->init(33, 24, gridSize);
+	_pWorldgrid->init(32, 24, gridSize);
 }
 
 
