@@ -1,22 +1,25 @@
 #pragma once
-#include "Controllable.h"
+#include <queue>
 #include "Parent.h"
 
 class Worker;
+class Order;
 
 class WorkOrganizer:
-	public Parent,
-	public Controllable
+	public Parent
 {
 public:
 	WorkOrganizer();
 	~WorkOrganizer();
 
-	void control(const long& operation) override;
+	void addOrder(const Order& order);
 	void addWorker(Worker* worker);
 	void removeEntity(Entity* entity) override;
+	void think();
+
 
 private:
+	std::priority_queue<Order> _orders;
 	std::vector<Worker*> _workers;
 };
 

@@ -10,7 +10,6 @@
 World::World()
 {
 	_pWorldgrid = new WorldGrid();
-	_pEntitySpawner = new EntitySpawner();
 	_pWorkOrganizer = new WorkOrganizer();
 }
 
@@ -21,14 +20,12 @@ World::~World()
 		delete temp[i];
 
 	delete _pWorldgrid;
-	delete _pEntitySpawner;
 	delete _pWorkOrganizer;
 }
 
 void World::init()
 {
 	float gridSize = 24.0f;
-	_pEntitySpawner->init(gridSize);
 	_pWorldgrid->init(32, 24, gridSize);
 }
 
@@ -79,6 +76,7 @@ void World::requestFocus(sf::RenderWindow * window)
 
 void World::think(const float& dt)
 {
+	_pWorkOrganizer->think();
 	for (size_t i = 0, size = _thinkingEntities.size(); i < size; i++)
 	{
 		_thinkingEntities[i]->think(dt);

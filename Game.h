@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+#include "KeyBinder.h"
 
 class World;
 class KeyboardController;
@@ -24,6 +25,7 @@ private:
 
 	sf::Clock _clock;
 	sf::RenderWindow* _pWindow;
+	KeyBinder* _pKeyBinder;
 	KeyboardController* _pController;
 	World* _pWorld;
 };

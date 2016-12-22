@@ -19,43 +19,6 @@ EntitySpawner::~EntitySpawner()
 {
 }
 
-void EntitySpawner::init(const float & gridSize)
-{
-	_gridSize = gridSize;
-	KeyboardController* k = Game::getInstance().getKeyboardController();
-	k->addKeyBind({ { sf::Keyboard::E, KeyboardController::KeyState::onKeyDown } }, Operations::SpawnWorker, this);
-	k->addKeyBind({ { sf::Keyboard::W, KeyboardController::KeyState::keyPressed } }, Operations::SpawnWall, this);
-	k->addKeyBind({ { sf::Keyboard::R, KeyboardController::KeyState::onKeyDown } }, Operations::ShowCoords, this);
-	k->addKeyBind({ { sf::Keyboard::T, KeyboardController::KeyState::keyPressed } }, Operations::RemoveEntity, this);
-}
-
-
-void EntitySpawner::control(const long& operation)
-{
-	sf::Vector2i mousePos = sf::Mouse::getPosition(*Game::getInstance().getWindow());
-	int x = mousePos.x / _gridSize;
-	int y = mousePos.y / _gridSize;
-	switch (operation)
-	{
-	case Operations::SpawnWall:
-		spawnWall(x, y);
-		break;
-
-	case Operations::SpawnWorker:
-		spawnWorker(x, y);
-		break;
-
-	case Operations::ShowCoords:
-		std::cout <<"Mouse x:" <<mousePos.x <<" y:" <<mousePos.y <<std::endl;
-		std::cout << "Grid x:" << mousePos.x / _gridSize << " y:" << mousePos.y / _gridSize << std::endl;
-		break;
-
-	case Operations::RemoveEntity:
-		removeEntity(x, y);
-		break;
-	}
-}
-
 void EntitySpawner::spawnWall(const int & gridX, const int & gridY)
 {
 	World* world = Game::getInstance().getWorld();

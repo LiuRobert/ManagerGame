@@ -4,12 +4,14 @@
 #include "KeyboardController.h"
 #include "LevelLoader.h"
 #include "World.h"
+#include "WorldGrid.h"
 
 
 Game::~Game()
 {
 	delete _pWindow;
 	delete _pWorld;
+	delete _pKeyBinder;
 	delete _pController;
 }
 
@@ -25,6 +27,8 @@ void Game::init()
 	_pWorld = new World();
 	_pWorld->init();
 	_pWindow = new sf::RenderWindow(sf::VideoMode(800, 600), "sfml_test");
+	_pKeyBinder = new KeyBinder();
+	_pKeyBinder->init(_pWorld->getWorldGrid()->getGridSize());
 }
 
 void Game::run()
@@ -57,7 +61,7 @@ KeyboardController* Game::getKeyboardController()
 	return _pController;
 }
 
-sf::RenderWindow * Game::getWindow()
+sf::RenderWindow* Game::getWindow()
 {
 	return _pWindow;
 }

@@ -33,7 +33,6 @@ private:
 	std::vector<Entity*> _entities;
 	std::vector<ThinkingEntity*> _thinkingEntities;
 	WorldGrid* _pWorldgrid;
-	EntitySpawner* _pEntitySpawner;
 	WorkOrganizer* _pWorkOrganizer;
 };
 

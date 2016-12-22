@@ -16,6 +16,9 @@ Worker::Worker(const float& x, const float& y)
 	setPosition(x, y);
 	_drawables.push_back(&_shape);
 	_gridSize = Game::getInstance().getWorld()->getWorldGrid()->getGridSize();
+	_hasGoal = false;
+	_haveOrder = false;
+	_movementSpeed = 2;
 }
 
 Worker::Worker(const GridCoord& coords)
@@ -27,27 +30,56 @@ Worker::Worker(const GridCoord& coords)
 	_shape.setOutlineThickness(2.0f);
 	setPosition(coords.x * _gridSize + 4, coords.y * _gridSize + 4);
 	_drawables.push_back(&_shape);
-	_goal = { 1, 1 };
+	_hasGoal = false;
+	_haveOrder = false;
+	_movementSpeed = 2;
 }
 
 Worker::~Worker()
 {
 }
 
-void Worker::control(const long & operation)
+bool Worker::haveOrder()
 {
-
+	return _haveOrder;
 }
 
 void Worker::think(const float& dt)
 {
 	WorldGrid* worldgrid = Game::getInstance().getWorld()->getWorldGrid();
-	if (_path.empty())
+	if (!_hasGoal && _haveOrder)
 	{
-		_path = worldgrid->getPath(mapPosition(), _goal);
+		_task = _order.tasks.back();
+		_order.tasks.pop_back();
+		_hasGoal = true;
 	}
 
+	if (_hasGoal)
+	{
+		if(_path.empty())
+			_path = worldgrid->getPath(mapPosition(), _task.where);
+		
+		Vector2D deltaGoal(_path.back().x * _gridSize, _path.back().y * _gridSize);
+		Vector2D direction = (deltaGoal - _pos).getNormalized();
+ 		direction = _pos + direction * _movementSpeed ;
+		setPosition(direction);
+		
+		if ((_pos - deltaGoal).length() < 5)
+			_path.pop_back();
 
+		if (_path.empty())
+		{
+			_hasGoal = false;
+			if (_order.tasks.empty())
+				_haveOrder = false;
+		}
+	}
+}
+
+void Worker::setOrder(const Order& order)
+{
+	_order = order;
+	_haveOrder = true;
 }
 
 void Worker::setPosition(const Vector2D& pos)
