@@ -26,9 +26,8 @@ private:
 	bool _hasGoal;
 	bool _haveOrder;
 	float _movementSpeed;
-	GridCoord _next;
 	std::vector<GridCoord> _path;
-	Vector2D _nextPos;
+	int _currentPath;
 	Order _order;
 	Order::Task _task;
 

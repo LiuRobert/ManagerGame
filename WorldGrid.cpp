@@ -56,13 +56,13 @@ float WorldGrid::getGridSize()
 
 std::vector<GridCoord> WorldGrid::getPath(const GridCoord& from, const GridCoord& to)
 {
-	/*
-	sf::RenderWindow* window = Game::getInstance().getWindow();
+	
+	/*sf::RenderWindow* window = Game::getInstance().getWindow();
 	sf::RectangleShape blueshape(sf::Vector2f(_gridSize, _gridSize));
 	blueshape.setFillColor(sf::Color::Blue);
 	sf::RectangleShape greenshape(sf::Vector2f(_gridSize, _gridSize));
-	greenshape.setFillColor(sf::Color(190, 226, 195));
-	*/
+	greenshape.setFillColor(sf::Color(190, 226, 195));*/
+	
 	std::vector<GridCoord> result;
 	Node* start = &_map[key(from.x, from.y)];
 	Node* goal = &_map[key(to.x, to.y)];
@@ -83,17 +83,17 @@ std::vector<GridCoord> WorldGrid::getPath(const GridCoord& from, const GridCoord
 
 		closedSet = node->insert(closedSet);
 		node->evaluated = true;
-		/*
+		
 		Node* current = openSet;
 		while (current != nullptr)
 		{
-			greenshape.setPosition(current->x * _gridSize, current->y * _gridSize);
-			window->draw(greenshape);
+			//greenshape.setPosition(current->x * _gridSize, current->y * _gridSize);
+			//window->draw(greenshape);
 			current = current->next;
 		}
-		blueshape.setPosition(node->x * _gridSize, node->y * _gridSize);
-		window->draw(blueshape);
-		*/
+		//blueshape.setPosition(node->x * _gridSize, node->y * _gridSize);
+		//window->draw(blueshape);
+		
 		if (node == goal)
 		{
 			while (openSet != nullptr)
@@ -157,11 +157,11 @@ std::vector<GridCoord> WorldGrid::getPath(const GridCoord& from, const GridCoord
 			if (dNode->entity == nullptr && !dNode->evaluated)
 				addToSet(openSet, goal, node, dNode, _distanceDiagonal);
 		}
-		/*
-		Game::getInstance().getWorld()->draw(window);
-		window->display();
-		window->clear(sf::Color(216, 221, 206));
-		*/
+		
+		//Game::getInstance().getWorld()->draw(window);
+		//window->display();
+		//window->clear(sf::Color(216, 221, 206));
+		
 	}
 
 	while (closedSet != nullptr)

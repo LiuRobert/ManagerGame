@@ -19,6 +19,7 @@ Worker::Worker(const float& x, const float& y)
 	_hasGoal = false;
 	_haveOrder = false;
 	_movementSpeed = 2;
+	_currentPath = 0;
 }
 
 Worker::Worker(const GridCoord& coords)
@@ -33,6 +34,7 @@ Worker::Worker(const GridCoord& coords)
 	_hasGoal = false;
 	_haveOrder = false;
 	_movementSpeed = 2;
+	_currentPath = 0;
 }
 
 Worker::~Worker()
@@ -56,18 +58,21 @@ void Worker::think(const float& dt)
 
 	if (_hasGoal)
 	{
-		if(_path.empty())
+		if (_path.empty())
+		{
 			_path = worldgrid->getPath(mapPosition(), _task.where);
+			_currentPath = _path.size() - 1;
+		}
 		
-		Vector2D deltaGoal(_path.back().x * _gridSize, _path.back().y * _gridSize);
+		Vector2D deltaGoal(_path[_currentPath].x * _gridSize, _path[_currentPath].y * _gridSize);
 		Vector2D direction = (deltaGoal - _pos).getNormalized();
- 		direction = _pos + direction * _movementSpeed ;
-		setPosition(direction);
+ 		direction *= _movementSpeed;
+		setPosition(_pos + direction);
 		
 		if ((_pos - deltaGoal).length() < 5)
-			_path.pop_back();
+			_currentPath--;
 
-		if (_path.empty())
+		if (_currentPath < 0)
 		{
 			_hasGoal = false;
 			if (_order.tasks.empty())

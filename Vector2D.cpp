@@ -16,32 +16,24 @@ Vector2D::~Vector2D()
 {
 }
 
-Vector2D& Vector2D::operator+(const Vector2D& rhs)
+Vector2D Vector2D::operator+(const Vector2D& rhs) const
 {
-	x += + rhs.x;
-	y += + rhs.y;
-	return *this;
+	return Vector2D(x + rhs.x, y + rhs.y);
 }
 
-Vector2D& Vector2D::operator-(const Vector2D& rhs)
+Vector2D Vector2D::operator-(const Vector2D& rhs) const
 {
-	x += - rhs.x;
-	y += - rhs.y;
-	return *this;
+	return Vector2D(x - rhs.x, y - rhs.y);
 }
 
-Vector2D& Vector2D::operator*(const float& rhs)
+Vector2D Vector2D::operator*(const float& rhs) const
 {
-	x *= rhs;
-	y *= rhs;
-	return *this;
+	return Vector2D(x * rhs, y * rhs);
 }
 
-Vector2D& Vector2D::operator/(const float& rhs)
+Vector2D Vector2D::operator/(const float& rhs) const
 {
-	x /= rhs;
-	y /= rhs;
-	return *this;
+	return Vector2D(x / rhs, y / rhs);
 }
 
 Vector2D& Vector2D::operator+=(const Vector2D& rhs)
@@ -66,14 +58,15 @@ Vector2D& Vector2D::operator/=(const float& rhs)
 
 float Vector2D::angle() const
 {
-	// TODO
-	return 0.0f;
+	Vector2D v = this->getNormalized();
+	return atan2(v.x, v.y);
 }
 
 float Vector2D::angle(const Vector2D& v) const
 {
-	// TODO
-	return 0.0f;
+	Vector2D v1 = this->getNormalized();
+	Vector2D v2 = v.getNormalized();
+	return atan2(v1.x, v1.y) - atan2(v2.x, v2.y);
 }
 
 void Vector2D::normalize()
@@ -81,7 +74,7 @@ void Vector2D::normalize()
 	*this = *this/length();
 }
 
-Vector2D Vector2D::getNormalized()
+Vector2D Vector2D::getNormalized() const
 {
 	Vector2D v(*this);
 	v.normalize();
